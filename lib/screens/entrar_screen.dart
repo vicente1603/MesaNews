@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'cadastro_screen.dart';
+import 'login_email_screen.dart';
+
 class EntrarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         body: Container(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -36,7 +39,7 @@ class EntrarScreen extends StatelessWidget {
                             color: Colors.white,
                             width: 1,
                             style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(5)),
                     onPressed: () {},
                   ),
                 )),
@@ -47,15 +50,18 @@ class EntrarScreen extends StatelessWidget {
                   width: double.infinity,
                   child: RaisedButton(
                     color: Colors.transparent,
-                    onPressed: null,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginEmailScreen()));
+                    },
                     child: Text('Entrar com e-mail',
                         style: TextStyle(color: Colors.white)),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
                             color: Colors.white,
-                            width: 1,
+                            width: 2,
                             style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(5)),
                   ),
                 )),
                 SizedBox(height: 16.0),
@@ -67,8 +73,12 @@ class EntrarScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CadastroScreen()));
+                      },
                       child: Text(
-                        "Cadastrar.",
+                        "Cadastrar",
                         style: TextStyle(color: Colors.blue),
                       ),
                     )
