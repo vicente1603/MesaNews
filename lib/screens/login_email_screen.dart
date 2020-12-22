@@ -1,14 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:mesa_news/screens/cadastro_screen.dart';
+import 'package:mesa_news/screens/entrar_screen.dart';
+import 'package:mesa_news/services/internet_service.dart';
+import 'package:mesa_news/services/usuario_service.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
+import 'news_screen.dart';
 
 class LoginEmailScreen extends StatelessWidget {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  ProgressDialog pr;
 
   @override
   Widget build(BuildContext context) {
+
+    pr = new ProgressDialog(context);
+
+    pr.style(
+        message: 'Entrando...',
+        borderRadius: 3.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Theme.of(context).primaryColor, fontSize: 15.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Theme.of(context).primaryColor, fontSize: 15.0, fontWeight: FontWeight.w600));
+
+
+    _mostrarDialogSemConexao() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Ocorreu um erro"),
+              content: Text("Você não está conectado com a internet."),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop(
+                          MaterialPageRoute(builder: (context) => EntrarScreen()));
+                    })
+              ],
+            );
+          });
+    }
+
+    void _onSuccess() async {
+      pr.show();
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        pr.hide().whenComplete(() {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => NewsScreen()));
+        });
+      });
+    }
+
+    void _onFail(success) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Usuário ou senha inválidos"),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ));
+    }
+
+
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -44,7 +107,7 @@ class LoginEmailScreen extends StatelessWidget {
                   decoration: InputDecoration(hintText: "Senha"),
                   obscureText: true,
                   validator: (text) {
-                    if (text.isNotEmpty && text.length < 6) {
+                    if (text.isNotEmpty) {
                       return "Senha inválida";
                     } else if (text.isEmpty) {
                       return "O campo senha é obrigatório";
@@ -58,8 +121,26 @@ class LoginEmailScreen extends StatelessWidget {
                   child: RaisedButton(
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LoginEmailScreen()));
+                      if (_formKey.currentState.validate()) {
+                        InternetService.verificarConexao().then((success) {
+                          if (success) {
+                            final body = {
+                              "email": _emailController.text.trim(),
+                              "password": _senhaController.text.trim(),
+                            };
+                            UsuarioService.autenticar(body)
+                                .then((success) {
+                              if (success) {
+                                _onSuccess();
+                              } else {
+                                _onFail(success);
+                              }
+                            });
+                          } else {
+                            _mostrarDialogSemConexao();
+                          }
+                        });
+                      }
                     },
                     child: Text('Login', style: TextStyle(color: Colors.white)),
                     shape: RoundedRectangleBorder(
@@ -82,7 +163,8 @@ class LoginEmailScreen extends StatelessWidget {
                             width: 2,
                             style: BorderStyle.solid),
                         borderRadius: BorderRadius.circular(5)),
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                   ),
                 ),
                 SizedBox(height: 16.0),
