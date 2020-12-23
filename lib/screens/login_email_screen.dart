@@ -107,9 +107,7 @@ class LoginEmailScreen extends StatelessWidget {
                   decoration: InputDecoration(hintText: "Senha"),
                   obscureText: true,
                   validator: (text) {
-                    if (text.isNotEmpty) {
-                      return "Senha inválida";
-                    } else if (text.isEmpty) {
+                    if (text.isEmpty) {
                       return "O campo senha é obrigatório";
                     }
                   },

@@ -24,20 +24,21 @@ class UsuarioService {
     }
   }
 
-// static Future<String> cadastrar(body) async {
-//   final response =
-//   await http.post('${URLS.PORTALCIDADAO}/Usuarios/Cadastrar', body: body);
-//
-//   var mensagem;
-//
-//   if (response.statusCode == 200) {
-//     mensagem = response.body;
-//     return mensagem;
-//   } else {
-//     mensagem = json.decode(response.body);
-//     mensagem = mensagem[0];
-//     return mensagem;
-//   }
-// }
+  static Future<bool> cadastrar(body) async {
+    var header = {
+      "Content-Type": "application/json",
+    };
+    final auth = json.encode(body);
 
+    final response = await http.post(
+        'https://mesa-news-api.herokuapp.com/v1/client/auth/signup',
+        body: auth,
+        headers: header);
+
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
