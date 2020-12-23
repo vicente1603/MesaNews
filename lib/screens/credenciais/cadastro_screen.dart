@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-import '../services/internet_service.dart';
-import '../services/usuario_service.dart';
+import '../../services/internet_service.dart';
+import '../../services/usuario_service.dart';
 import 'entrar_screen.dart';
 
 class CadastroScreen extends StatelessWidget {
@@ -61,13 +61,13 @@ class CadastroScreen extends StatelessWidget {
       Future.delayed(Duration(seconds: 1)).then((value) {
         pr.hide().whenComplete(() {
           _scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text("OK"),
+            content: Text("Usuário criado com sucesso"),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 2),
           ));
 
-          // Navigator.of(context).pushReplacement(
-          //     MaterialPageRoute(builder: (context) => EntrarScreen()));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => EntrarScreen()));
         });
       });
     }

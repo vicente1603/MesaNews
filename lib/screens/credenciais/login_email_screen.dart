@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mesa_news/screens/cadastro_screen.dart';
-import 'package:mesa_news/screens/entrar_screen.dart';
+import 'file:///D:/Documentos/FlutterProjects/mesa_news/lib/screens/credenciais/cadastro_screen.dart';
+import 'file:///D:/Documentos/FlutterProjects/mesa_news/lib/screens/credenciais/entrar_screen.dart';
 import 'package:mesa_news/services/internet_service.dart';
 import 'package:mesa_news/services/usuario_service.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-import 'news_screen.dart';
+import '../news_screen.dart';
 
 class LoginEmailScreen extends StatelessWidget {
   final _emailController = TextEditingController();
@@ -57,6 +57,9 @@ class LoginEmailScreen extends StatelessWidget {
       pr.show();
       Future.delayed(Duration(seconds: 1)).then((value) {
         pr.hide().whenComplete(() {
+
+          Navigator.pop(context);
+
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => NewsScreen()));
         });
