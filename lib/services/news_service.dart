@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:mesa_news/models/news_detalhe_model.dart';
 import 'package:mesa_news/models/news_model.dart';
@@ -30,10 +29,10 @@ class NewsService {
           .map((i) => new NewsDetalheModel.fromJson(i))
           .toList();
 
-      // final paginacao = new PaginacaoModel.fromJson(data["pagination"]);
+      final paginacao = new PaginacaoModel.fromJson(data["pagination"]);
 
       news.data = newsDetalhes;
-      // news.pagination = paginacao;
+      news.pagination = paginacao;
 
       return news;
     } else {

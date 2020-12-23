@@ -9,18 +9,53 @@ class NewsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      isThreeLine: true,
-      contentPadding: EdgeInsets.all(16),
-      title: Text(
-        news.title,
-        textAlign: TextAlign.justify,
-      ),
-      subtitle: Text(
-        news.description,
-        textAlign: TextAlign.justify,
-      ),
+    return GestureDetector(
       onTap: () {},
+      child: Container(
+        margin: EdgeInsets.only(bottom: 24),
+        width: MediaQuery.of(context).size.width,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          alignment: Alignment.bottomCenter,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(6),
+                  bottomLeft: Radius.circular(6))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Image.network(
+                    news.image_url,
+                    height: 150,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  )),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                news.title,
+                maxLines: 2,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                news.description,
+                maxLines: 2,
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

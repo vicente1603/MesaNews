@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/Documentos/FlutterProjects/mesa_news/lib/screens/credenciais/cadastro_screen.dart';
-import 'file:///D:/Documentos/FlutterProjects/mesa_news/lib/screens/credenciais/entrar_screen.dart';
+import '../news_screen.dart';
 import 'package:mesa_news/services/internet_service.dart';
 import 'package:mesa_news/services/usuario_service.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-import '../news_screen.dart';
+import 'cadastro_screen.dart';
+import 'entrar_screen.dart';
 
 class LoginEmailScreen extends StatelessWidget {
   final _emailController = TextEditingController();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'file:///D:/Documentos/FlutterProjects/mesa_news/lib/screens/credenciais/entrar_screen.dart';
+import 'screens/credenciais/entrar_screen.dart';
 
 void main() {
   runApp(MyApp());
