@@ -1,5 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mesa_news/models/news_detalhe_model.dart';
 import 'package:mesa_news/models/news_model.dart';
 import 'package:mesa_news/services/news_service.dart';
 import 'package:mesa_news/tiles/news_popular_tile.dart';
@@ -14,7 +14,7 @@ class NewsScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(10),
                 child: Row(
                   children: [
                     Text(
@@ -25,17 +25,17 @@ class NewsScreen extends StatelessWidget {
                   ],
                 )),
             Container(
-                height: 180,
-                child: FutureBuilder<NewsModel>(
-                  future: NewsService.getNews(),
+                height: 175,
+                child: FutureBuilder<List<NewsDetalheModel>>(
+                  future: NewsService.getPopularNews(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return NewsPopularTile(snapshot.data.data[index]);
+                          return NewsPopularTile(snapshot.data[index]);
                         },
-                        itemCount: snapshot.data.data.length,
+                        itemCount: snapshot.data.length,
                       );
                     } else {
                       return Center(child: CircularProgressIndicator());
@@ -43,7 +43,7 @@ class NewsScreen extends StatelessWidget {
                   },
                 )),
             Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 child: Row(
                   children: [
                     Text(
@@ -54,24 +54,23 @@ class NewsScreen extends StatelessWidget {
                   ],
                 )),
             Expanded(
+                flex: 1,
                 child: FutureBuilder<NewsModel>(
-              future: NewsService.getNews(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return Divider(height: 2, color: Colors.black);
-                    },
-                    itemBuilder: (context, index) {
-                      return NewsTile(snapshot.data.data[index]);
-                    },
-                    itemCount: snapshot.data.data.length,
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            ))
+                  future: NewsService.getNews(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return NewsTile(snapshot.data.data[index]);
+                        },
+                        itemCount: snapshot.data.data.length,
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )),
           ],
         ),
       ),

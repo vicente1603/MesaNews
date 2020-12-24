@@ -39,4 +39,32 @@ class NewsService {
       return null;
     }
   }
+
+  static Future<List<NewsDetalheModel>> getPopularNews() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    String token = (prefs.getString("token") ?? "");
+
+    var header = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${token}"
+    };
+
+    final response = await http.get(
+        'https://mesa-news-api.herokuapp.com/v1/client/news/highlights',
+        headers: header);
+
+    if (response.statusCode == 200) {
+      Map data = json.decode(response.body);
+
+
+      final newsPopularDetalhes = (data["data"] as List)
+          .map((i) => new NewsDetalheModel.fromJson(i))
+          .toList();
+
+      return newsPopularDetalhes;
+    } else {
+      return null;
+    }
+  }
 }
