@@ -33,6 +33,7 @@ class NewsService {
 
       news.data = newsDetalhes;
       news.pagination = paginacao;
+      // news.pagination.current_page = 2;
 
       return news;
     } else {

@@ -48,6 +48,7 @@ class NewsPopularTile extends StatelessWidget {
                   children: [
                     Text(
                       news.title,
+                      maxLines: 3,
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,
