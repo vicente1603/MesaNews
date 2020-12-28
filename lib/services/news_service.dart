@@ -6,7 +6,7 @@ import 'package:mesa_news/models/paginacao_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewsService {
-  static Future<NewsModel> getNews() async {
+  static Future<List<NewsDetalheModel>> getNews(pagina_atual) async {
     var prefs = await SharedPreferences.getInstance();
 
     String token = (prefs.getString("token") ?? "");
@@ -16,8 +16,10 @@ class NewsService {
       "Authorization": "Bearer ${token}"
     };
 
+
+
     final response = await http.get(
-        'https://mesa-news-api.herokuapp.com/v1/client/news?current_page=&per_page=&published_at=',
+        'https://mesa-news-api.herokuapp.com/v1/client/news?current_page=${pagina_atual}&per_page=10&published_at=',
         headers: header);
 
     if (response.statusCode == 200) {
@@ -35,7 +37,7 @@ class NewsService {
       news.pagination = paginacao;
       // news.pagination.current_page = 2;
 
-      return news;
+      return news.data;
     } else {
       return null;
     }

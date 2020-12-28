@@ -55,7 +55,7 @@ class NewsPopularTile extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         IconButton(
                             icon: Icon(Icons.star_border), onPressed: () {}),
@@ -64,7 +64,7 @@ class NewsPopularTile extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.w400),
                         )
                       ],
                     ),

@@ -45,15 +45,15 @@ class NewsTile extends StatelessWidget {
                 height: 12,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(icon: Icon(Icons.star_border), onPressed: () {}),
                   Text(
                     timeago.format(dataPublicacao, locale: 'pt_BR'),
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400),
                   )
                 ],
               ),
