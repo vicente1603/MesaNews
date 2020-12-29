@@ -1,6 +1,7 @@
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:mesa_news/models/news_detalhe_model.dart';
+import 'package:intl/intl.dart';
 
 class DetalhesNewsScreen extends StatelessWidget {
   NewsDetalheModel news;
@@ -10,6 +11,8 @@ class DetalhesNewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime dataPublicacao = DateTime.parse(news.published_at);
+    String formattedDate =
+        DateFormat('dd/MM/yyy  kk:mm').format(dataPublicacao);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,16 +44,23 @@ class DetalhesNewsScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(icon: Icon(Icons.star_border), onPressed: () {}),
                   Text(
-                    "${dataPublicacao.day}/${dataPublicacao.month}/${dataPublicacao.year}",
+                    formattedDate,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  )
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  Expanded(
+                      child: Text(
+                    " | Atualizada em ${formattedDate}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400),
+                  ))
                 ],
               ),
               SizedBox(height: 10),
@@ -79,9 +89,9 @@ class DetalhesNewsScreen extends StatelessWidget {
                 textColor: Colors.white,
                 onPressed: () async {
                   await FlutterShare.share(
-                      title: news.title,
-                      text: news.content,
-                      linkUrl: news.url,
+                    title: news.title,
+                    text: news.content,
+                    linkUrl: news.url,
                   );
                 },
               )

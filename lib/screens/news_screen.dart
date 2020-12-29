@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mesa_news/models/news_detalhe_model.dart';
-import 'package:mesa_news/models/news_model.dart';
 import 'package:mesa_news/services/news_service.dart';
 import 'package:mesa_news/tiles/news_popular_tile.dart';
 import 'package:mesa_news/tiles/news_tile.dart';
