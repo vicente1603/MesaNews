@@ -5,6 +5,8 @@ import 'package:mesa_news/tiles/news_popular_tile.dart';
 import 'package:mesa_news/tiles/news_tile.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import 'filtro_screen.dart';
+
 class NewsScreen extends StatefulWidget {
   @override
   _NewsScreenState createState() => _NewsScreenState();
@@ -61,7 +63,21 @@ class _NewsScreenState extends State<NewsScreen> {
             color: Colors.black, fontSize: 15.0, fontWeight: FontWeight.w600));
 
     return Scaffold(
-      appBar: AppBar(title: Text("Mesa News"), centerTitle: true),
+      appBar: AppBar(
+        title: Text("Mesa News"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.filter_list_outlined,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => FiltroScreen()));
+              })
+        ],
+      ),
       body: Container(
         child: Column(
           children: [

@@ -37,6 +37,8 @@ dependencies:
   timeago: ^2.0.29
   date_format: ^1.0.9
   flutter_share: ^1.0.5
+  rxdart: ^0.20.0
+  bloc_pattern: ^1.3.0
 
 dev_dependencies:
   flutter_test:
