@@ -1,5 +1,7 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mesa_news/bloc/favoritos_bloc.dart';
 import 'package:mesa_news/models/news_detalhe_model.dart';
 import 'package:mesa_news/screens/detalhes_news_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -11,6 +13,7 @@ class NewsPopularTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<FavoritosBloc>(context);
     DateTime dataPublicacao = DateTime.parse(news.published_at);
     timeago.setLocaleMessages('pt_BR', timeago.PtBrMessages());
 
@@ -57,8 +60,26 @@ class NewsPopularTile extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        IconButton(
-                            icon: Icon(Icons.star_border), onPressed: () {}),
+                        StreamBuilder<Map<String, NewsDetalheModel>>(
+                          stream: bloc.outFav,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return IconButton(
+                                icon: Icon(
+                                  snapshot.data.containsKey(news.title)
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  bloc.toggleFavorite(news);
+                                },
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        ),
                         Text(
                           timeago.format(dataPublicacao, locale: 'pt_BR'),
                           style: TextStyle(
