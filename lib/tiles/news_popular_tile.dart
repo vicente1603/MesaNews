@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mesa_news/bloc/favoritos_bloc.dart';
 import 'package:mesa_news/models/news_detalhe_model.dart';
-import 'package:mesa_news/screens/detalhes_news_screen.dart';
+import 'file:///D:/Documents/Desenvolvimento/FlutterProjects/MesaNews/lib/screens/news/detalhes_news_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NewsPopularTile extends StatelessWidget {

@@ -39,38 +39,38 @@ class _FiltroScreenState extends State<FiltroScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            FutureBuilder<List<NewsDetalheModel>>(
-              future: NewsService.getNews(1),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  timeago.setLocaleMessages('pt_BR', timeago.PtBrMessages());
-                  return DropdownButton<NewsDetalheModel>(
-                    items: snapshot.data
-                        .map((news) => DropdownMenuItem<NewsDetalheModel>(
-                              child: Text(timeago.format(
-                                  DateTime.parse(news.published_at),
-                                  locale: 'pt_BR')),
-                              value: news,
-                            ))
-                        .toList(),
-                    onChanged: (NewsDetalheModel value) {
-                      setState(() {
-                        newsSelecionada = value;
-                      });
-                    },
-                    isExpanded: true,
-                    //value: _currentUser,
-                    hint: newsSelecionada != null
-                        ? Text(timeago.format(
-                            DateTime.parse(newsSelecionada.published_at),
-                            locale: 'pt_BR'))
-                        : Text("SELECIONE"),
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+            // FutureBuilder<List<NewsDetalheModel>>(
+            //   future: NewsService.getNews(1),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       timeago.setLocaleMessages('pt_BR', timeago.PtBrMessages());
+            //       return DropdownButton<NewsDetalheModel>(
+            //         items: snapshot.data
+            //             .map((news) => DropdownMenuItem<NewsDetalheModel>(
+            //                   child: Text(timeago.format(
+            //                       DateTime.parse(news.published_at),
+            //                       locale: 'pt_BR')),
+            //                   value: news,
+            //                 ))
+            //             .toList(),
+            //         onChanged: (NewsDetalheModel value) {
+            //           setState(() {
+            //             newsSelecionada = value;
+            //           });
+            //         },
+            //         isExpanded: true,
+            //         //value: _currentUser,
+            //         hint: newsSelecionada != null
+            //             ? Text(timeago.format(
+            //                 DateTime.parse(newsSelecionada.published_at),
+            //                 locale: 'pt_BR'))
+            //             : Text("SELECIONE"),
+            //       );
+            //     } else {
+            //       return Center(child: CircularProgressIndicator());
+            //     }
+            //   },
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

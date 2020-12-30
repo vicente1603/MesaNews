@@ -1,22 +1,112 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../news_screen.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import '../news/news_screen.dart';
 import 'package:mesa_news/services/internet_service.dart';
 import 'package:mesa_news/services/usuario_service.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-
 import 'cadastro_screen.dart';
 import 'entrar_screen.dart';
+import 'package:http/http.dart' as http;
 
-class LoginEmailScreen extends StatelessWidget {
+class LoginEmailScreen extends StatefulWidget {
+  @override
+  _LoginEmailScreenState createState() => _LoginEmailScreenState();
+}
+
+class _LoginEmailScreenState extends State<LoginEmailScreen> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   ProgressDialog pr;
 
+  bool isLoggedIn = false;
+
+  void initiateFacebookLogin() async {
+    var facebookLogin = FacebookLogin();
+    var facebookLoginResult =
+    await facebookLogin.logInWithReadPermissions(['email']);
+    switch (facebookLoginResult.status) {
+      case FacebookLoginStatus.error:
+        print("Error");
+        onLoginStatusChanged(false);
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print("CancelledByUser");
+        onLoginStatusChanged(false);
+        break;
+      case FacebookLoginStatus.loggedIn:
+        final token = facebookLoginResult.accessToken.token;
+        final graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final profile = jsonDecode(graphResponse.body);
+        print(profile);
+        InternetService.verificarConexao().then((success) {
+          if (success) {
+            final body = {
+              "email": profile["email"],
+              "password": profile["id"],
+            };
+            UsuarioService.autenticar(body).then((success) {
+              if (success) {
+                _onSuccess();
+              } else {
+                _onFail(success);
+              }
+            });
+          } else {
+            _mostrarDialogSemConexao();
+          }
+        });
+        print("LoggedIn");
+        onLoginStatusChanged(true);
+        break;
+    }
+  }
+
+  void onLoginStatusChanged(bool isLoggedIn) {
+    setState(() {
+      this.isLoggedIn = isLoggedIn;
+    });
+  }
+
+  _mostrarDialogSemConexao() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Ocorreu um erro"),
+            content: Text("Você não está conectado com a internet."),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(MaterialPageRoute(
+                        builder: (context) => EntrarScreen()));
+                  })
+            ],
+          );
+        });
+  }
+
+  void _onSuccess() async {
+    Navigator.pop(context);
+
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => NewsScreen()));
+  }
+
+  void _onFail(success) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Usuário ou senha inválidos"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-
     pr = new ProgressDialog(context);
 
     pr.style(
@@ -29,10 +119,13 @@ class LoginEmailScreen extends StatelessWidget {
         progress: 0.0,
         maxProgress: 100.0,
         progressTextStyle: TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 15.0, fontWeight: FontWeight.w400),
+            color: Theme.of(context).primaryColor,
+            fontSize: 15.0,
+            fontWeight: FontWeight.w400),
         messageTextStyle: TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 15.0, fontWeight: FontWeight.w600));
-
+            color: Theme.of(context).primaryColor,
+            fontSize: 15.0,
+            fontWeight: FontWeight.w600));
 
     _mostrarDialogSemConexao() {
       showDialog(
@@ -45,8 +138,8 @@ class LoginEmailScreen extends StatelessWidget {
                 FlatButton(
                     child: Text("OK"),
                     onPressed: () {
-                      Navigator.of(context).pop(
-                          MaterialPageRoute(builder: (context) => EntrarScreen()));
+                      Navigator.of(context).pop(MaterialPageRoute(
+                          builder: (context) => EntrarScreen()));
                     })
               ],
             );
@@ -57,7 +150,6 @@ class LoginEmailScreen extends StatelessWidget {
       pr.show();
       Future.delayed(Duration(seconds: 1)).then((value) {
         pr.hide().whenComplete(() {
-
           Navigator.pop(context);
 
           Navigator.of(context).pushReplacement(
@@ -73,7 +165,6 @@ class LoginEmailScreen extends StatelessWidget {
         duration: Duration(seconds: 2),
       ));
     }
-
 
     return Scaffold(
         key: _scaffoldKey,
@@ -129,8 +220,7 @@ class LoginEmailScreen extends StatelessWidget {
                               "email": _emailController.text.trim(),
                               "password": _senhaController.text.trim(),
                             };
-                            UsuarioService.autenticar(body)
-                                .then((success) {
+                            UsuarioService.autenticar(body).then((success) {
                               if (success) {
                                 _onSuccess();
                               } else {
@@ -164,8 +254,7 @@ class LoginEmailScreen extends StatelessWidget {
                             width: 2,
                             style: BorderStyle.solid),
                         borderRadius: BorderRadius.circular(5)),
-                    onPressed: () {
-                    },
+                    onPressed: () => initiateFacebookLogin(),
                   ),
                 ),
                 SizedBox(height: 16.0),

@@ -52,3 +52,7 @@ android {
 flutter {
     source '../..'
 }
+
+dependencies {
+    implementation 'com.facebook.android:facebook-login:[8.1)'
+}
