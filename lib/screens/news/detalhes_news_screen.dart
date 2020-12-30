@@ -1,5 +1,7 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:mesa_news/bloc/favoritos_bloc.dart';
 import 'package:mesa_news/models/news_detalhe_model.dart';
 import 'package:intl/intl.dart';
 
@@ -10,6 +12,7 @@ class DetalhesNewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<FavoritosBloc>(context);
     DateTime dataPublicacao = DateTime.parse(news.published_at);
     String formattedDate =
         DateFormat('dd/MM/yyy  kk:mm').format(dataPublicacao);
@@ -45,7 +48,26 @@ class DetalhesNewsScreen extends StatelessWidget {
               SizedBox(height: 10),
               Row(
                 children: [
-                  IconButton(icon: Icon(Icons.star_border), onPressed: () {}),
+                  StreamBuilder<Map<String, NewsDetalheModel>>(
+                    stream: bloc.outFav,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return IconButton(
+                          icon: Icon(
+                            snapshot.data.containsKey(news.title)
+                                ? Icons.star
+                                : Icons.star_border,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: () {
+                            bloc.toggleFavorite(news);
+                          },
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
                   Text(
                     formattedDate,
                     style: TextStyle(
